@@ -1,0 +1,86 @@
+# Default values for kube-service-selectors.
+prometheusScrape: true
+
+replicaCount: 1
+
+image:
+  repository: hystax/kube-service-selectors
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.1.0"
+
+imagePullSecrets: []
+
+rbac:
+  # If true, create & use RBAC resources
+  create: true
+  # Set to a rolename to use existing role - skipping role creating - but still doing serviceaccount and rolebinding to it, rolename set here.
+  # useExistingRole: your-existing-role
+  # If set to false - Run without Clusteradmin privs needed - ONLY works if namespace is also set (if useExistingRole is set this name is used as ClusterRole or Role to bind to)
+  useClusterRole: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+  # Reference to one or more secrets to be used when pulling images
+  imagePullSecrets: []
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  annotations: {}
+  type: ClusterIP
+  port: 30091
+  nodePort: 0
+  loadBalancerIP: ""
+  clusterIP: ""
+
+# List of additional arguments
+extraArgs:
+# Enable debug logging
+# - --debug=true
+# Change requests timeout
+# - --timeout=10
+
+# Override the deployment namespace
+namespaceOverride: ""
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# Node labels for pod assignment
+nodeSelector: {}
+
+# Tolerations for pod assignment
+tolerations: []
+
+# Affinity settings for pod assignment
+affinity: {}
+
+# Comma-separated list of namespaces to be enabled for collecting resources. By default all namespaces are collected.
+namespaces: ""

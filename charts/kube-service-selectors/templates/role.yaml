@@ -1,0 +1,23 @@
+{{- if and (eq .Values.rbac.create true) (not .Values.rbac.useExistingRole) -}}
+{{- range (ternary (split "," .Values.namespaces) (list "") (eq $.Values.rbac.useClusterRole false)) }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+{{- if eq $.Values.rbac.useClusterRole false }}
+kind: Role
+{{- else }}
+kind: ClusterRole
+{{- end }}
+metadata:
+  labels:
+    {{- include "kube-service-selectors.labels" $ | indent 4 }}
+  name: {{ template "kube-service-selectors.fullname" $ }}
+{{- if eq $.Values.rbac.useClusterRole false }}
+  namespace: {{ . }}
+{{- end }}
+rules:
+- apiGroups: [""]
+  resources:
+  - services
+  verbs: ["list", "watch"]
+{{- end -}}
+{{- end -}}
