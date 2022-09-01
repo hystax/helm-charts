@@ -1,0 +1,15 @@
+apiVersion: v1
+entries:
+  kube-service-selectors:
+  - apiVersion: v2
+    created: "2022-09-01T08:53:18.780322874Z"
+    digest: cbc855f59f826d505626b322210f26a3042f4a0d8e0d5d5403654342ecb02486
+    maintainers:
+    - email: info@hystax.com
+      name: hystax
+    name: kube-service-selectors
+    type: application
+    urls:
+    - https://github.com/hystax/helm-charts/releases/download/kube-service-selectors-1.0.1/kube-service-selectors-1.0.1.tgz
+    version: 1.0.1
+generated: "2022-09-01T08:53:18.780330074Z"
