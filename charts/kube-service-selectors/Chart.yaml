@@ -1,4 +1,7 @@
 apiVersion: v2
 name: kube-service-selectors
 type: application
-version: 0.1.3
+version: 1.0.1
+maintainers:
+  - name: hystax
+    email: info@hystax.com
