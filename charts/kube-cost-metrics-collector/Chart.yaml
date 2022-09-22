@@ -1,0 +1,18 @@
+apiVersion: v2
+name: kube-cost-metrics-collector
+version: 0.1.0
+description: OptScale Kubernetes metrics collector.
+type: application
+dependencies:
+  - name: kube-state-metrics
+    version: "4.9.1"
+    repository: https://prometheus-community.github.io/helm-charts
+  - name: prometheus
+    version: "15.10.0"
+    repository: https://prometheus-community.github.io/helm-charts
+  - name: kube-service-selectors
+    version: "1.0.1"
+    repository: https://hystax.github.io/helm-charts
+maintainers:
+  - name: hystax
+    email: info@hystax.com

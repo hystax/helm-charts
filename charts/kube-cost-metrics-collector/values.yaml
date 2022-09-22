@@ -1,0 +1,68 @@
+kube-state-metrics:
+  releaseLabel: true
+  metricLabelsAllowlist:
+  - endpoints=[*]
+  - jobs=[*]
+  - namespaces=[*]
+  - nodes=[*]
+  - pods=[*]
+  - services=[*]
+  metricAnnotationsAllowList:
+  - endpoints=[*]
+  - jobs=[*]
+  - namespaces=[*]
+  - nodes=[*]
+  - pods=[*]
+  - services=[*]
+
+prometheus:
+  kubeStateMetrics:
+    enabled: false
+  serviceAccounts:
+    alertmanager:
+      create: false
+  server:
+    remote_write:
+    # OptScale target skeleton. Target also includes tls and auth settings, extra headers and so on
+    - url: https://172.22.6.70/storage/api/v2/write
+      name: optscale
+
+    # OptScale Kubernetes data source id
+    dataSourceId: null
+    # Username which is used on OptScale Kubernetes data source registration
+    username: null
+    # Password which is used on OptScale Kubernetes data source registration
+    password: null
+    # remote write OptScale target tls CA certificate file
+    # caFile: ca-certificates.crt
+    caFile:
+
+    configMapOverrideName: prometheus-server-config
+    persistentVolume:
+      enabled: false
+    defaultFlagsOverride:
+    - --enable-feature=agent
+    - --config.file=/etc/config/prometheus.yml
+    - --web.enable-lifecycle
+    extraConfigmapMounts:
+    # Config map with CA cert file
+    - name: cert-config
+      mountPath: /etc/optscale/ssl
+      configMap: prometheus-server-cert-config
+      subPath: ""
+      readOnly: true
+    extraSecretMounts:
+    # Secret with password file
+    - name: password-secret
+      mountPath: /etc/optscale/auth
+      subPath: ""
+      secretName: prometheus-server-password-secret
+      readOnly: true
+  serverFiles:
+    prometheus.yml:
+      rule_files: []
+  pushgateway:
+    persistentVolume:
+      enabled: false
+  alertmanager:
+    enabled: false
