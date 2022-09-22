@@ -1,0 +1,5 @@
+prometheus:
+  server:
+    dataSourceId: test
+    username: test
+    password: test
