@@ -24,7 +24,7 @@ prometheus:
   server:
     remote_write:
     # OptScale target skeleton. Target also includes tls and auth settings, extra headers and so on
-    - url: https://172.22.6.70/storage/api/v2/write
+    - url: https://my.optscale.com/storage/api/v2/write
       name: optscale
 
     # OptScale Kubernetes data source id
@@ -33,8 +33,7 @@ prometheus:
     username: null
     # Password which is used on OptScale Kubernetes data source registration
     password: null
-    # remote write OptScale target tls CA certificate file
-    # caFile: ca-certificates.crt
+    # Remote write OptScale target tls CA certificate file
     caFile:
 
     configMapOverrideName: prometheus-server-config
