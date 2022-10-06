@@ -1,0 +1,9 @@
+{{ $dataSourceId := .Values.prometheus.server.dataSourceId }}
+
+The application will send "{{ $dataSourceId }}" data source metrics to:
+{{- range $value := .Values.prometheus.server.remote_write }}
+- {{ $value.url  }}
+{{- end }}
+
+For more details, visit:
+{{ include "kube-cost-metrics-collector.optscaleUrl" . }}cloud-accounts/{{ $dataSourceId }}

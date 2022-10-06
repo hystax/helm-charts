@@ -2,4 +2,7 @@ remote: origin
 target-branch: main
 chart-dirs:
   - charts
+chart-repos:
+  - hystax=https://hystax.github.io/helm-charts
+  - prometheus-community=https://prometheus-community.github.io/helm-charts
 helm-extra-args: --timeout 600s

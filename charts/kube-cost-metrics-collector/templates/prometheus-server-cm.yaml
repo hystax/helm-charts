@@ -1,0 +1,66 @@
+{{- if .Values.prometheus.server.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "optscale-k8s-collector.prometheus.server.labels" . | nindent 4 }}
+  name: {{ printf "%s-prometheus-server-config" .Release.Name | trunc 63 | trimSuffix "-" }}
+{{ include "optscale-k8s-collector.prometheus.namespace" . | indent 2 }}
+data:
+{{- $root := .Values.prometheus -}}
+{{- range $key, $value := .Values.prometheus.ruleFiles }}
+  {{ $key }}: {{- toYaml $value | indent 2 }}
+{{- end }}
+{{- range $key, $value := .Values.prometheus.serverFiles }}
+  {{ $key }}: |
+{{- if eq $key "prometheus.yml" }}
+    global:
+      external_labels:
+        cloud_account_id: {{ required "prometheus.server.dataSourceId is required" $root.server.dataSourceId }}
+{{ $root.server.global | toYaml | trimSuffix "\n" | indent 6 }}
+{{- if $root.server.remote_write }}
+    remote_write:
+{{- range $value := $root.server.remote_write }}
+    - {{ $value | toYaml | indent 6 | trim }}
+{{- if eq $value.name "optscale" }}
+      headers:
+        Cloud-Account-Id: {{ $root.server.dataSourceId }}
+      basic_auth:
+        username: {{ required "prometheus.server.username is required" $root.server.username }}
+        password_file: /etc/optscale/auth/passwd
+      tls_config:
+{{- if $root.server.caFile }}
+        insecure_skip_verify: false
+        ca_file: /etc/optscale/ssl/ca.crt
+{{- else }}
+        insecure_skip_verify: true
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if $root.server.remoteRead }}
+    remote_read:
+{{ $root.server.remoteRead | toYaml | indent 4 }}
+{{- end }}
+{{- end }}
+{{- if eq $key "alerts" }}
+{{- if and (not (empty $value)) (empty $value.groups) }}
+    groups:
+{{- range $ruleKey, $ruleValue := $value }}
+    - name: {{ $ruleKey -}}.rules
+      rules:
+{{ $ruleValue | toYaml | trimSuffix "\n" | indent 6 }}
+{{- end }}
+{{- else }}
+{{ toYaml $value | indent 4 }}
+{{- end }}
+{{- else }}
+{{ toYaml $value | default "{}" | indent 4 }}
+{{- end }}
+{{- if eq $key "prometheus.yml" -}}
+{{- if $root.extraScrapeConfigs }}
+{{ toYaml $root.extraScrapeConfigs | default "{}" | indent 4 }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
