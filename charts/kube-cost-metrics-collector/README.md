@@ -1,4 +1,4 @@
-OptScale Kubernetes Cost Mertics Collector
+OptScale Kubernetes Cost Metrics Collector
 ====
 Ready-to-deploy setup of components necessary for Kubernetes cost management and FinOps in Hystax OptScale.
 
