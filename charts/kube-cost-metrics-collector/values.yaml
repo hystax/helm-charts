@@ -1,26 +1,40 @@
-kube-state-metrics:
-  releaseLabel: true
-  metricLabelsAllowlist:
-  - endpoints=[*]
-  - jobs=[*]
-  - namespaces=[*]
-  - nodes=[*]
-  - pods=[*]
-  - services=[*]
-  metricAnnotationsAllowList:
-  - endpoints=[*]
-  - jobs=[*]
-  - namespaces=[*]
-  - nodes=[*]
-  - pods=[*]
-  - services=[*]
-
 prometheus:
-  kubeStateMetrics:
-    enabled: false
+  kube-state-metrics:
+    releaseLabel: true
+    metricLabelsAllowlist:
+      - endpoints=[*]
+      - jobs=[*]
+      - namespaces=[*]
+      - nodes=[*]
+      - pods=[*]
+      - services=[*]
+    metricAnnotationsAllowList:
+      - endpoints=[*]
+      - jobs=[*]
+      - namespaces=[*]
+      - nodes=[*]
+      - pods=[*]
+      - services=[*]
+
   serviceAccounts:
     alertmanager:
       create: false
+
+  kubeStateMetrics:
+    enabled: true
+
+  prometheus-node-exporter:
+    enabled: true
+    hostNetwork: false
+
+  prometheus-pushgateway:
+    enabled: true
+    persistentVolume:
+      enabled: false
+
+  alertmanager:
+    enabled: false
+
   server:
     remote_write:
     # OptScale target skeleton. Target also includes tls and auth settings, extra headers and so on
@@ -60,8 +74,4 @@ prometheus:
   serverFiles:
     prometheus.yml:
       rule_files: []
-  pushgateway:
-    persistentVolume:
-      enabled: false
-  alertmanager:
-    enabled: false
+
