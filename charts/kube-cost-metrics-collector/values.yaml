@@ -74,4 +74,3 @@ prometheus:
   serverFiles:
     prometheus.yml:
       rule_files: []
-
