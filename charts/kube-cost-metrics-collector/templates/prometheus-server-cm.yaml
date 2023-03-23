@@ -43,7 +43,7 @@ data:
 {{ $root.server.remoteRead | toYaml | indent 4 }}
 {{- end }}
 {{- end }}
-{{- if eq $key "alerts" }}
+{{- if eq $key "alerting_rules.yml" }}
 {{- if and (not (empty $value)) (empty $value.groups) }}
     groups:
 {{- range $ruleKey, $ruleValue := $value }}

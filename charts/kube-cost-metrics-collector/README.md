@@ -33,6 +33,9 @@ Parameter | Description
 prometheus.server.dataSourceId | OptScale Kubernetes data source id
 prometheus.server.username | username which is used on OptScale Kubernetes data source registration
 prometheus.server.password | password which is used on OptScale Kubernetes data source registration
+prometheus.kubeStateMetrics.enabled | set to false if external kube-state-metrics exists and accessible
+prometheus.prometheus-node-exporter.enabled | set to false if external node-exporter exists and accessible
+prometheus.prometheus-pushgateway.enabled | set to false if external pushgateway exists and accessible
 
 Additional options are in [values.yaml](values.yaml). Alternatively run
 ```bash
