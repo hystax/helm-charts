@@ -1,6 +1,6 @@
 apiVersion: v2
 name: kube-cost-metrics-collector
-version: 0.1.1
+version: 0.1.2
 description: OptScale Kubernetes metrics collector.
 type: application
 dependencies:
