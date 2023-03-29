@@ -4,7 +4,9 @@ Ready-to-deploy setup of components necessary for Kubernetes cost management and
 
 Components
 - [Prometheus](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus)
-- [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics)
+  - [kube-state-metrics](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics)
+  - [prometheus-node-exporter](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-node-exporter)
+  - [prometheus-pushgateway](https://github.com/walker-tom/helm-charts/tree/main/charts/prometheus-pushgateway)
 - [kube-service-selectors](https://github.com/hystax/helm-charts/tree/main/charts/kube-service-selectors)
 
 ## Prerequisites
@@ -16,6 +18,7 @@ Prerequisites are based on dependencies:
 Helm chart for the OptScale Kubernetes Collector project, which is created to collect Kubernetes resources information and share it with OptScale FinOps project - https://hystax.com/optscale/.
 
 ## Installation
+One release per cluster
 ```bash
 helm install kube-cost-metrics-collector hystax/kube-cost-metrics-collector \
 --set prometheus.server.dataSourceId=<data-source-id> \
@@ -23,6 +26,33 @@ helm install kube-cost-metrics-collector hystax/kube-cost-metrics-collector \
 --set prometheus.server.password=<password> \
 --namespace optscale \
 --create-namespace
+```
+
+*Override **optscale** remote write target to send metrics to [opensource Optscale](https://github.com/hystax/optscale)*
+```bash
+helm install kube-cost-metrics-collector hystax/kube-cost-metrics-collector \
+--set prometheus.server.dataSourceId=<data-source-id> \
+--set prometheus.server.username=<username> \
+--set prometheus.server.password=<password> \
+--set prometheus.server.remote_write[0].url=https://<ip-address>/storage/api/v2/write \
+--set prometheus.server.remote_write[0].name=optscale \
+--namespace optscale \
+--create-namespace
+```
+
+## Upgrade
+```bash
+helm upgrade kube-cost-metrics-collector hystax/kube-cost-metrics-collector \
+--namespace optscale
+```
+
+### Version 0.1.1
+Prometheus chart was upgraded from 15.10.0 to 17.0.2.
+Because of changes in [Prometheus](https://github.com/prometheus-community/helm-charts/tree/prometheus-17.0.2/charts/prometheus#upgrading-chart) chart please do the following before upgrade:
+```bash
+kubectl delete --namespace optscale daemonset kube-cost-metrics-collector-prometheus-node-exporter
+kubectl delete --namespace optscale deployments kube-cost-metrics-collector-prometheus-pushgateway
+kubectl scale deployments --namespace optscale kube-cost-metrics-collector-prometheus-server --replicas=0
 ```
 
 ## Configuration
