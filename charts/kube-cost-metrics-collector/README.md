@@ -28,7 +28,7 @@ helm install kube-cost-metrics-collector hystax/kube-cost-metrics-collector \
 --create-namespace
 ```
 
-*Override **optscale** remote write target to send metrics to [open source Optscale](https://github.com/hystax/optscale)*
+*Override **optscale** remote write target to send metrics to [open source OptScale](https://github.com/hystax/optscale)*
 ```bash
 helm install kube-cost-metrics-collector hystax/kube-cost-metrics-collector \
 --set prometheus.server.dataSourceId=<data-source-id> \
