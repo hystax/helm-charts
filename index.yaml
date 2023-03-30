@@ -2,6 +2,25 @@ apiVersion: v1
 entries:
   kube-cost-metrics-collector:
   - apiVersion: v2
+    created: "2023-03-30T06:36:41.649138556Z"
+    dependencies:
+    - name: prometheus
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 17.0.2
+    - name: kube-service-selectors
+      repository: https://hystax.github.io/helm-charts
+      version: 1.0.1
+    description: OptScale Kubernetes metrics collector.
+    digest: 28ea157c75311034562d7b6d0a5cf4fb4bd8a52d2db33a402d3a994eab79c938
+    maintainers:
+    - email: info@hystax.com
+      name: hystax
+    name: kube-cost-metrics-collector
+    type: application
+    urls:
+    - https://github.com/hystax/helm-charts/releases/download/kube-cost-metrics-collector-0.1.2/kube-cost-metrics-collector-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     created: "2023-03-23T12:47:38.409101715Z"
     dependencies:
     - name: prometheus
@@ -65,4 +84,4 @@ entries:
     urls:
     - https://github.com/hystax/helm-charts/releases/download/kube-service-selectors-1.0.1/kube-service-selectors-1.0.1.tgz
     version: 1.0.1
-generated: "2023-03-23T12:47:38.409564522Z"
+generated: "2023-03-30T06:36:41.649162957Z"
