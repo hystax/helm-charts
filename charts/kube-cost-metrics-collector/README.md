@@ -6,7 +6,6 @@ Components
 - [Prometheus](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus)
   - [kube-state-metrics](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics)
   - [prometheus-node-exporter](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-node-exporter)
-  - [prometheus-pushgateway](https://github.com/walker-tom/helm-charts/tree/main/charts/prometheus-pushgateway)
 - [kube-service-selectors](https://github.com/hystax/helm-charts/tree/main/charts/kube-service-selectors)
 
 ## Prerequisites
@@ -40,10 +39,25 @@ helm install kube-cost-metrics-collector hystax/kube-cost-metrics-collector \
 --create-namespace
 ```
 
+*For self-hosted OptScale with a self-signed certificate add:*
+```bash
+--set prometheus.server.insecure_skip_verify=true
+```
+
 ## Upgrade
 ```bash
 helm upgrade kube-cost-metrics-collector hystax/kube-cost-metrics-collector \
 --namespace optscale
+```
+
+### Version 0.2.0
+Prometheus chart was upgraded from 17.0.2 to 29.31.1.
+Because of breaking changes in the Prometheus chart please do the following before upgrade:
+```bash
+kubectl delete --namespace optscale daemonset kube-cost-metrics-collector-prometheus-node-exporter
+kubectl delete --namespace optscale deployment kube-cost-metrics-collector-prometheus-kube-state-metrics
+kubectl delete --namespace optscale deployment kube-cost-metrics-collector-prometheus-pushgateway
+kubectl scale deployment --namespace optscale kube-cost-metrics-collector-prometheus-server --replicas=0
 ```
 
 ### Version 0.1.1
@@ -63,9 +77,9 @@ Parameter | Description
 prometheus.server.dataSourceId | OptScale Kubernetes data source id
 prometheus.server.username | username which is used on OptScale Kubernetes data source registration
 prometheus.server.password | password which is used on OptScale Kubernetes data source registration
-prometheus.kubeStateMetrics.enabled | set to false if external kube-state-metrics exists and accessible
+prometheus.server.insecure_skip_verify | set to true for self-hosted OptScale with a self-signed certificate (default: false)
+prometheus.kube-state-metrics.enabled | set to false if external kube-state-metrics exists and accessible
 prometheus.prometheus-node-exporter.enabled | set to false if external node-exporter exists and accessible
-prometheus.prometheus-pushgateway.enabled | set to false if external pushgateway exists and accessible
 
 Additional options are in [values.yaml](values.yaml). Alternatively run
 ```bash
