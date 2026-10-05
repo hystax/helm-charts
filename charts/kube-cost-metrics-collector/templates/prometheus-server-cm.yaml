@@ -1,4 +1,3 @@
-{{- if .Values.prometheus.server.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -33,8 +32,12 @@ data:
         insecure_skip_verify: false
         ca_file: /etc/optscale/ssl/ca.crt
 {{- else }}
-        insecure_skip_verify: true
+        insecure_skip_verify: {{ $root.server.insecure_skip_verify | default false }}
 {{- end }}
+      write_relabel_configs:
+      - source_labels: [__name__]
+        regex: container_cpu_usage_seconds_total|container_memory_usage_bytes|kube_pod_info|kube_pod_labels|kube_pod_container_resource_limits|kube_pod_container_resource_requests|kube_resourcequota|kube_node_labels|kube_node_status_capacity|kube_node_info|kube_service_selectors
+        action: keep
 {{- end }}
 {{- end }}
 {{- end }}
@@ -60,7 +63,6 @@ data:
 {{- if eq $key "prometheus.yml" -}}
 {{- if $root.extraScrapeConfigs }}
 {{ toYaml $root.extraScrapeConfigs | default "{}" | indent 4 }}
-{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}

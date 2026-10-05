@@ -1,11 +1,11 @@
 apiVersion: v2
 name: kube-cost-metrics-collector
-version: 0.1.2
+version: 0.2.0
 description: OptScale Kubernetes metrics collector.
 type: application
 dependencies:
   - name: prometheus
-    version: "17.0.2"
+    version: "29.31.1"
     repository: https://prometheus-community.github.io/helm-charts
   - name: kube-service-selectors
     version: "1.0.1"
