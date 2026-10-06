@@ -55,9 +55,9 @@ Prometheus chart was upgraded from 17.0.2 to 29.31.1.
 Because of breaking changes in the Prometheus chart please do the following before upgrade:
 ```bash
 kubectl delete --namespace optscale daemonset kube-cost-metrics-collector-prometheus-node-exporter
-kubectl delete --namespace optscale deployment kube-cost-metrics-collector-prometheus-kube-state-metrics
+kubectl delete --namespace optscale deployment kube-cost-metrics-collector-kube-state-metrics
 kubectl delete --namespace optscale deployment kube-cost-metrics-collector-prometheus-pushgateway
-kubectl scale deployment --namespace optscale kube-cost-metrics-collector-prometheus-server --replicas=0
+kubectl delete --namespace optscale deployment kube-cost-metrics-collector-prometheus-server
 ```
 
 ### Version 0.1.1
